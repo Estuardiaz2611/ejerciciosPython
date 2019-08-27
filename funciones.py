@@ -1,7 +1,8 @@
 #****************************************************************
 #*************************ejercicios de python*******************
 #****************************************************************
-import math
+
+from math import sqrt, floor
 
 #funcion par impar 
 
@@ -38,15 +39,14 @@ def prob_5(nA1, nB1, nC1, nA2, nB2, nC2):
 #bubble sort descendente
 
 def prob_6(a):
-    a=[]
-    for i in range(a):
-        a.append(i)
-    for i in range(a -1):
-        if(a[j]>a[j+1]):
-            temp = a[j]
-            a[j] = a[j+1]
-            a[j+1] = temp
-            return (a)
+    n = len(a)
+    for i in range(n):
+        for j in range(n -1):
+            if(a[j]<a[j+1]):
+                temp = a[j]
+                a[j] = a[j+1]
+                a[j+1] = temp
+    return (a)
 
 #Multiplos
 
@@ -66,13 +66,19 @@ def prob_7(n, m):
 
 #piramide de asteriscos Problema 8
 
-def prob_8(j):
-    i=1
-    while i<=j:
-        print((j*' ')+i*'* ')
-        j=j-1
-        i=i+1
+def prob_8(n):
+    piramide = ""
+    if n == 0:
+        return None
+    elif n == 1:
+        return "*"
+    else:
+        for i in range(n-1, 0, -1):
+            es = " " * i
+            asteriscos = "* " * (n-i)
+            piramide += es + asteriscos + "\n"
 
+    return piramide
 
 #tripletas pitagoricas problema 9
 
@@ -111,32 +117,21 @@ def prob_9(c1, c2, c3):
         return False
 
 #Treingulo con puntos
-def Prob_10(ax1, ay2, bx1, by2, cx1, cy2):
-    r1 = math.sqrt((ax1*bx1)**2+(ay2*by2)**2)
-    r2 = math.sqrt((bx1*cx1)**2+(by2*cy2)**2)
-    r3 = math.sqrt((cx1*ax1)**2+(cy2*ay2)**2)
-    print (r1, r2, r3)
-    if r1>r2>r3:
-        r2+r3 ==r1
-        return True
-    elif r1>r3>r2:
-        r3+r2==r1
-        return True
-    elif r1<r2<r3:
-        r1+r2==r3
-        return True
-    elif r2<r1<r3:
-        r2+r1==r3
-        return True
-    elif r2>r1>r3:
-        r1+r3==r2
-        return True
-    elif r2>r3>r1:
-        r3+r1==r2
-        return True
+def prob_10(a,b,c):
+    r1 = sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
+    r2 = sqrt((b[0] - c[0])**2 + (b[1] - c[1])**2)
+    r3 = sqrt((c[0] - a[0])**2 + (c[1] - a[1])**2)
+    total = [r1, r2, r3]
+    if total[0] + total[1] <= total[2]:
+        return ("no es un triangulo")
+    if total[0]==total[1] and total[1]==total[2]:
+        return ("Triangulo Equilatero")
+    elif total[0]==total[1] or total[1] == total[2]:
+        return ("Triangulo Isosceles")
     else:
-        return False
-    
+        return ("Triangulo Escaleno")
+
+
 
 #invertir palabras
 
@@ -196,15 +191,20 @@ def prob_12(n):
     return orden
 
 #suma de divisores de un numero
-#Espacio para trabajar en la funcion
-#prob_13():
+
+def prob_13(numero):
+    resultado = 0
+    for i in [1, numero]:
+        if numero%i == 0:
+            resultado += i
+    return resultado
 
 
 #verificacion si un numero es primo
 
 def prob_14(numero):
     if numero <= 1:
-        return ("ingrese un numero mayo a 1")
+        return ("ingrese un numero mayor a 1")
     else:
         contador = 0
         for i in range(1, numero + 1):
@@ -220,7 +220,7 @@ def prob_14(numero):
 def prob_15(n):
     suma=0
     for i in range(1,n):
-        if (n % (i) == 0):
+        if (n%i == 0):
             suma += (i)
     if n==suma:
         return True
@@ -228,29 +228,32 @@ def prob_15(n):
         return False
 
 #Verificacion de que sean Numero amigos
-#Espacio para trabajar la funcion
-#pob_16():
+
+def prob_16(n1, n2):
+    tX = 0
+    tR = 0
+    for i in range(1, n1):
+        if n1%i == 0:
+            tX += i
+        if n2%i == 0:
+            tR += i
+
+    return tX == n2 and tR == n1
 
 
 #veridicacion de ue sean Primos Relativos
 
 def prob_17(n1, n2):
-    suma=0
-    if n1 and n2 <= 1:
-        return ("el numero debe de ser mayo a 1")
-    else:
-        contador1 = 0
-        contador2 = 0
-        for i in range(1, n1 + 1):
-            if n1 % i == 0:
-                contador1 = contador1 + 1
-        for i in range(1, n2 + 1):
-            if n2 % i == 0:
-                contador2 = contador2 + 1
-        if contador2 == 2:
-            return True
-        else:
-            return ("Uno de los dos o los dos no son primos")
+    ar = []
+    for i in range(2, n1):
+        if n1%i == 0:
+            ar.append(i)
+
+    for i in range(2, n2):
+        if n2%i == 0 and i in ar:
+            return False
+
+    return True
 
 #serie de numero fibonacci
 
@@ -264,16 +267,82 @@ def prob_18(n):
 #cumple con tener ese ese mismo numero de digitos
 
 def prob_19(n):
-    a, b = 0,1
-    while a < n:
-        a,b = b, a+b
-    return True
+    x = 0
+    y = 1
+    while True:
+        if len(str(x)) == n:
+            return x
+        x, y = y, x+y
+
 
 #Encuentra las tripletas pitagoricas
 
-def prob_20(a, b, c):
-    total = 1000
-    if a**2+b**2+c**2 == total:
-        return("es una tripleta pitagorica")
+def prob_20():
+    ar = []
+    for j in range(1, 1000):
+        for i in range(j+1, 1000):
+            a = i**2 - j**2
+            b = 2*j*i
+            c = j**2 + i**2
+            if ((a**2 + b**2) == c**2) and (a + b + c) == 1000:
+                ar.append([a,b,c])
+
+    return ("Los valores son: ", ar)
+
+#Dado un entero positivo, encontrar todos los nuemeros primos
+
+def prob_21(n):
+    almacenar = []
+    for i in range(2, n+1):
+        if prob_14(i):
+            almacenar.append(i)
+    return almacenar
+
+#Encontrar si es cuadrado
+
+def prob_22(pts1, pts2, pts3, pts4):
+    if pts1 == pts2:
+        return False
+    elif pts2 == pts3:
+        return False
+    elif pts3 == pts4:
+        return False
     else:
-        return ("No es una tripleta pictagorica")
+        distancia1 = sqrt((pts1[0] - pts2[0])**2 + (pts1[1] - pts2[1])**2)
+        distancia2 = sqrt((pts1[0] - pts3[0])**2 + (pts1[1] - pts3[1])**2)
+        distancia3 = sqrt((pts1[0] - pts4[0])**2 + (pts1[1] - pts4[1])**2)
+        r1 = [distancia1,distancia2,distancia3]
+        distancia4 = sqrt((pts4[0] - pts1[0])**2 + (pts4[1] - pts1[1])**2)
+        distancia5 = sqrt((pts4[0] - pts2[0])**2 + (pts4[1] - pts2[1])**2)
+        distancia6 = sqrt((pts4[0] - pts3[0])**2 + (pts4[1] - pts3[1])**2)
+        r2 = [distancia4, distancia5, distancia6] 
+        return r1 == r2
+
+#dada una lista, encuentre una lista con todas las posibles listas
+
+def prob_24(numeros):
+    orden = numeros
+    numerosOrdenados = [orden.copy()]
+    ref = []
+    n = len(orden)
+
+    for i in range(n):
+        ref.append(0)
+
+    i = 0
+
+    while i < n:
+        if ref[i] < i:
+            if prob_1(i):
+                orden[0], orden[i]= orden[i], orden[0]
+            else:
+                orden[ref[i]], orden[i] = orden[i], orden[ref[i]]
+            numerosOrdenados.append(orden.copy())
+            ref[i] += 1
+
+            i = 0
+        else:
+            ref[i] = 0
+            i += 1
+
+    return numerosOrdenados
